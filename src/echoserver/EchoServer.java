@@ -9,9 +9,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
+
 	
 	// REPLACE WITH PORT PROVIDED BY THE INSTRUCTOR
-	public static final int PORT_NUMBER = 0; 
+	public static final int PORT_NUMBER = 6013;
 	public static void main(String[] args) throws IOException, InterruptedException {
 		EchoServer server = new EchoServer();
 		server.start();
@@ -34,6 +35,7 @@ public class EchoServer {
 			//   * Construct a Thread with your runnable
 			//      * Or use a thread pool
 			//   * Start that thread
+			socket.close();
 
 		}
 
@@ -41,6 +43,7 @@ public class EchoServer {
 	final class ClientThread implements Runnable{
 		InputStream in;
 		OutputStream out;
+
 
 		public ClientThread(InputStream in, OutputStream out){
 			this.in = in;
