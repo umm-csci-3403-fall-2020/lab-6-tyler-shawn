@@ -20,6 +20,7 @@ teardown() {
   cd src
   java echoserver.EchoServer &
   status=$?
+  sleep 1
   kill %1
   cd ..
   [ "$status" -eq 0 ]
