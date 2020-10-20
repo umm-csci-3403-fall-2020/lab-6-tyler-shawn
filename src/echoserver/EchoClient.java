@@ -12,12 +12,45 @@ public class EchoClient {
 		EchoClient client = new EchoClient();
 		client.start();
 	}
-
+         
 	private void start() throws IOException {
-		Socket socket = new Socket("localhost", PORT_NUMBER);
+		Socket socket = new Socket(PORT_NUMBER):
 		InputStream socketInputStream = socket.getInputStream();
 		OutputStream socketOutputStream = socket.getOutputStream();
+                
+		WriteToServer toServer = new WriteToServer(output, socket);
+		Thread outputThread = new Thread(toServer);
+		outputThread.start();
 
-		// Put your code here.
+		ReadFromServer response = new ReadFromServer(input, socket);
+		Thread inputThread = new Thread(response);
+		inputThread.start();
 	}
+
+	public class ReadFromServer implements Runnable {
+		InputStream input
+		int recieve;
+		Socket sock;
+
+		public ReadFromServer(InputStream input, Socket sock){
+			this.input = input;
+			this.sock = sock;
+		}
+
+		@Override
+		public void run(){
+			try {
+				while ((receive = input.read()) != -1){
+					System.out.write(receive);
+					System.out.flush();
+				}
+				sock.shutdownInput(); //Close connection
+
+			}
+			catch (IOException ioe){
+				System.out.println("Caught an unexpected exception");
+			}
+		}
+	}
+
 }
