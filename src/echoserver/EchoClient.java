@@ -3,33 +3,35 @@ package echoserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class EchoClient {
 	public static final int PORT_NUMBER = 6013;
 
 	public static void main(String[] args) throws IOException {
+
 		EchoClient client = new EchoClient();
 		client.start();
 	}
          
 	private void start() throws IOException {
-		Socket socket = new Socket(PORT_NUMBER):
-		InputStream socketInputStream = socket.getInputStream();
-		OutputStream socketOutputStream = socket.getOutputStream();
+		Socket socket = new Socket("localhost", PORT_NUMBER);
+		InputStream input = socket.getInputStream();
+		OutputStream output = socket.getOutputStream();
                 
-		WriteToServer toServer = new WriteToServer(output, socket);
-		Thread outputThread = new Thread(toServer);
+		WriteToServer write = new WriteToServer(output, socket);
+		Thread outputThread = new Thread(write);
 		outputThread.start();
 
-		ReadFromServer response = new ReadFromServer(input, socket);
-		Thread inputThread = new Thread(response);
+		ReadFromServer read = new ReadFromServer(input, socket);
+		Thread inputThread = new Thread(read);
 		inputThread.start();
 	}
 
 	public class ReadFromServer implements Runnable {
-		InputStream input
-		int recieve;
+		InputStream input;
+		int read;
 		Socket sock;
 
 		public ReadFromServer(InputStream input, Socket sock){
@@ -40,8 +42,9 @@ public class EchoClient {
 		@Override
 		public void run(){
 			try { // Keep reading until the user stops sending data
-				while ((receive = input.read()) != -1){
-					System.out.write(receive);
+
+				while ((read = input.read()) != -1){
+					System.out.write(read);
 					System.out.flush();
 				}
 				sock.shutdownInput(); //Close connection
@@ -59,7 +62,7 @@ public class EchoClient {
 		Socket sock;
 
 		public WriteToServer(OutputStream output, Socket sock) throws IOException {
-			this.output = output
+			this.output = output;
 			this.sock = sock;
 		}
 

@@ -25,9 +25,9 @@ public class EchoServer {
 			Socket socket = serverSocket.accept();
 			InputStream in = socket.getInputStream();
 			OutputStream out = socket.getOutputStream();
-
-			clientThread client = new clientThread(in, out);
-			client.run();
+			ClientThread client = new ClientThread(in, out);
+			Thread thread = new Thread(client);
+			thread.start();
 			// Put your code here.
 			// This should do very little, essentially:
 			//   * Construct an instance of your runnable class
@@ -38,12 +38,11 @@ public class EchoServer {
 		}
 
 	}
-	final class clientThread implements Runnable{
+	final class ClientThread implements Runnable{
 		InputStream in;
 		OutputStream out;
-		byte[] temp = new byte[16*1024];
 
-		public clientThread(InputStream in, OutputStream out){
+		public ClientThread(InputStream in, OutputStream out){
 			this.in = in;
 			this.out = out;
 
