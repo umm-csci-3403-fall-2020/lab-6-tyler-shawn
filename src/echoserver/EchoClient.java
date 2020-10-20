@@ -39,7 +39,7 @@ public class EchoClient {
 
 		@Override
 		public void run(){
-			try {
+			try { // Keep reading until the user stops sending data
 				while ((receive = input.read()) != -1){
 					System.out.write(receive);
 					System.out.flush();
@@ -52,5 +52,29 @@ public class EchoClient {
 			}
 		}
 	}
+	
+	public class WriteToServer implements Runnable {
+		OutputStream output;
+		int send;
+		Socket sock;
 
+		public WriteToServer(OutputStream output, Socket sock) throws IOException {
+			this.output = output
+			this.sock = sock;
+		}
+
+		@Override
+		public void run(){
+			try {	// Keep reading until the user stops sending data
+				while ((send = System.in.read()) != -1){ 
+					output.write(send);
+					output.flush();
+				}
+				sock.shutdownOutput(); // Close connection 
+			}
+			catch (IOException ioe){
+				System.out.println("We caught an unexpected exception");
+			}
+		}
+	}
 }
